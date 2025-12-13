@@ -2,9 +2,11 @@ name: CI Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   test-and-build:
@@ -29,7 +31,6 @@ jobs:
           PYTHONPATH: .
         run: |
           pytest
-
 
       - name: Build Docker image
         run: |
