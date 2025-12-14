@@ -1,26 +1,29 @@
-# ================================
-# Stage 1: Test Stage
-# ================================
-FROM python:3.12-slim AS test-stage
+# =========================
+# Stage 1: Test stage
+# =========================
+FROM python:3.12-slim AS test
 
 WORKDIR /app
+
 COPY requirements.txt requirements-dev.txt ./
 
 RUN pip install --no-cache-dir -r requirements.txt \
     && pip install --no-cache-dir -r requirements-dev.txt
 
 COPY . .
+
 ENV PYTHONPATH=/app
+
 CMD ["pytest"]
 
-# ================================
-# Stage 2: Production Stage 
-# ================================
+# =========================
+# Stage 2: Production stage
+# =========================
 FROM python:3.12-slim AS runtime
 
 WORKDIR /app
 
-COPY requirements.txt ./    
+COPY requirements.txt ./
 
 RUN pip install --no-cache-dir -r requirements.txt
 
