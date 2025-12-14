@@ -36,6 +36,11 @@ jobs:
         run: |
           docker build -t flask-ci-app .
 
-      - name: Run tests inside Docker
+      - name: Run tests inside Docker (test stage)
         run: |
-          docker run --rm flask-ci-app pytest
+          docker build --target test -t flask-ci-test .
+          docker run --rm flask-ci-test
+
+      - name: Build production Docker image
+        run: |
+          docker build --target runtime -t flask-ci-app .
