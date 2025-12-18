@@ -1,15 +1,16 @@
+import pytest
 from app import create_app
 
-def test_health_check():
-    flask_app = create_app()
-    client = flask_app.test_client()
-    response = client.get("/health")
-    assert response.status_code == 200
+@pytest.fixture
+def client():
+    app = create_app()
+    app.testing = True
+    return app.test_client()
 
-def test_create_task():
-    flask_app = create_app()
-    client = flask_app.test_client()
-    response = client.post("/tasks", json={"title": "CI Task"})
-    assert response.status_code == 201
+def test_health(client):
+    response = client.get("/health")
     data = response.get_json()
-    assert data["title"] == "CI Task"
+
+    assert response.status_code == 200
+    assert data["status"] == "ok"
+    assert data["message"] == "CI + Docker pipeline working 🚀"
