@@ -1,6 +1,12 @@
-from app import create_app
+from flask import Blueprint, jsonify
 
-app = create_app()
+api = Blueprint("api", __name__)
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+@api.route("/health")
+def health():
+    return jsonify({"status": "ok"})
+
+# ❌ BAD ENDPOINT (INTENTIONAL BUG)
+@api.route("/divide")
+def divide():
+    return 10 / 0   # 💥 division by zero
