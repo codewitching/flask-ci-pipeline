@@ -1,13 +1,29 @@
-FROM python:3.12-slim
+# ======================
+# Stage 1: Test stage
+# ======================
+FROM python:3.12-slim AS test
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt pytest
+
+COPY . .
+
+CMD ["pytest"]
+
+
+# ======================
+# Stage 2: Production stage
+# ======================
+FROM python:3.12-slim AS production
 
 WORKDIR /app
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY app ./app
+COPY app.py .
 
-# 👇 THIS IS THE IMPORTANT FIX
-ENV PYTHONPATH=/app
-
-CMD ["pytest"]
+CMD ["python", "app.py"]
