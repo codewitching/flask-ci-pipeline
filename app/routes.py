@@ -8,3 +8,6 @@ def health():
         "status": "ok",
         "message": "CI + Docker pipeline working 🚀"
     })
+@api.route("/divide")
+def divide():
+    return jsonify({"result": 5})
